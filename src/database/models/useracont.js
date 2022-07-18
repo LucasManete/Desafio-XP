@@ -15,7 +15,7 @@ const userAcont = (Sequelize, DataTypes) => {
       as: 'broker',
       foreignKey: 'id', 
       through: UserAcontTable,
-      otherKey:'Cnpj'
+      otherKey:'id'
     })
   }
   return UserAcontTable;

@@ -1,0 +1,15 @@
+const AcontServices = require('../services/acontUser.services');
+
+const getAcontUserController = async (req, res) => {
+  const { id } = req.params;
+  const result = await AcontServices.getBalanceUser(id);
+  return res.status(200).json(result);
+};
+
+const depositUserController = async (req, res) => {
+  const { codCliente, Valor } = req.body;
+  const result = await AcontServices.depositUser(codCliente, Valor);
+  return res.status(200).json(result);
+};
+
+module.exports = { getAcontUserController, depositUserController };
