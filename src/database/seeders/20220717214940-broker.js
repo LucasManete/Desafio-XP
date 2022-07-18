@@ -5,18 +5,16 @@ module.exports = {
       {
         name: 'XP',
         cnpj: 45484,
-        createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
-        updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       {
         name: 'Binance',
         cnpj: 54782,
-        createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
-        updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-    ],
-
-    {},
+      {
+        name: 'Binance',
+        cnpj: 54782,
+      },
+    ],{ timestamps: false },
   ),
 
   down: async (queryInterface) => queryInterface.bulkDelete('Brokers', null, {}),

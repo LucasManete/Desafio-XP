@@ -7,11 +7,11 @@ const Broker = (Sequelize, DataTypes) => {
     },
     Name: DataTypes.STRING,
     Cnpj: DataTypes.INTEGER
-  });
+  },  { timestamps: false });
   brokerTable.associate = (models) => {
     //conferir
-   brokerTable.hasMany(models.Assets, {foreignKey: 'id', as: 'Assets'})
-   brokerTable.hasMany(models.UserAcont, {foreignKey: 'id', as: 'UserAconts'})
+   brokerTable.hasMany(models.Asset, {foreignKey: 'id', as: 'asset'})
+   brokerTable.hasMany(models.UserAcont, {foreignKey: 'id', as: 'useraconts'})
   }
   return brokerTable;
 };

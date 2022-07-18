@@ -7,10 +7,10 @@ const User = (Sequelize, DataTypes) => {
     },
     Name: DataTypes.STRING,
     Document: DataTypes.INTEGER
-  });
+  }, { timestamps: false });
   userTable.associate = (models) => {
-    User.hasMany(models.Investment, {foreignKey: 'id', as: 'Invesments'})
-    User.hasOne(models.UserAcont, {foreignKey: 'id', as: 'UserAcont'})
+    models.User.hasMany(models.Investment, {foreignKey: 'id', as: 'investment'})
+    models.User.hasOne(models.UserAcont, {foreignKey: 'id', as: 'useracont'})
   }
   return userTable;
 };

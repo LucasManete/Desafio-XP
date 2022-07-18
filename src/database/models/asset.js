@@ -9,9 +9,12 @@ const Asset = (Sequelize, DataTypes) => {
     Quantity: DataTypes.INTEGER,
     valor: DataTypes.DECIMAL,
     codCorretora:DataTypes.INTEGER,
+  },
+  {
+    timestamps: false,
   });
   assetTable.associate = (models) => {
-    assetTable.belongsTo(models.Brokers, {foreignKey: 'id', as: 'broker'})
+    assetTable.belongsTo(models.Broker, {foreignKey: 'id', as: 'broker'})
     assetTable.belongsTo(models.Investment, {foreignKey: 'id', as: 'investment'})
   }
   return assetTable;

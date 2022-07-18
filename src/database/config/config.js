@@ -5,7 +5,7 @@ module.exports = {
     username: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE || 'desafioXP',
-    host: process.env.DB_HOST || '127.0.0.1',
+    host: process.env.DB_HOST || 'db',
     dialect: process.env.DB_CONNECTION || 'mysql',
   },
   test: {

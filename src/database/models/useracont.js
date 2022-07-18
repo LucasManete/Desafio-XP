@@ -8,10 +8,15 @@ const userAcont = (Sequelize, DataTypes) => {
     Balance: DataTypes.INTEGER,
     codCliente: DataTypes.INTEGER,
     codCorretora: DataTypes.INTEGER,
-  }); 
+  }, { timestamps: false }); 
   UserAcontTable.associate = (models) => {
-    UserAcontTable.belongsTo(models.User, {foreignKey: 'id', as: 'Users'})
-    UserAcontTable.belongsToMany(models.Broker, {foreignKey: 'id', as: 'Brokers'})
+    UserAcontTable.belongsTo(models.User, {foreignKey: 'id', as: 'user'})
+    UserAcontTable.belongsToMany(models.Broker, {
+      as: 'broker',
+      foreignKey: 'id', 
+      through: UserAcontTable,
+      otherKey:'Cnpj'
+    })
   }
   return UserAcontTable;
 };

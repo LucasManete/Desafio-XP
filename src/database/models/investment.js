@@ -8,10 +8,10 @@ const investment = (Sequelize, DataTypes) => {
     Valor: DataTypes.INTEGER,
     codCliente: DataTypes.INTEGER,
     codAtivo: DataTypes.INTEGER
-  });
+  }, { timestamps: false });
   investmentTable.associate = (models) => {
-    investmentTable.hasOne(models.Assets, {foreignKey: 'id', as: 'Assets'})
-    investmentTable.belongsTo(models.User, {foreignKey: 'id', as: 'Users'} )
+    investmentTable.hasOne(models.Asset, {foreignKey: 'id', as: 'asset'})
+    investmentTable.belongsTo(models.User, {foreignKey: 'id', as: 'user'} )
   }
 
   return investmentTable;
