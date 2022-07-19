@@ -18,4 +18,12 @@ const depositUser = async (codCliente, Valor) => {
   return newBalance;
 };
 
-module.exports = { getBalanceUser, depositUser };
+const withdrawUser = async (codCliente, Valor) => {
+  const byPk = await UserAcont.findByPk(codCliente);
+  const Saldo = byPk.dataValues.Balance - Valor;
+  await UserAcont.update({ Balance: Saldo }, { where: { codCliente } });
+  const newBalance = await UserAcont.findByPk(codCliente);
+  return newBalance;
+};
+
+module.exports = { getBalanceUser, depositUser, withdrawUser };

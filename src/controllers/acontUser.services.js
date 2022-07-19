@@ -12,4 +12,10 @@ const depositUserController = async (req, res) => {
   return res.status(200).json(result);
 };
 
-module.exports = { getAcontUserController, depositUserController };
+const withdrawUserController = async (req, res) => {
+  const { codCliente, Valor } = req.body;
+  const result = await AcontServices.withdrawUser(codCliente, Valor);
+  return res.status(200).json(result);
+};
+
+module.exports = { getAcontUserController, depositUserController, withdrawUserController };
