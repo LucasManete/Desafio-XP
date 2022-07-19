@@ -6,11 +6,12 @@ const investment = (Sequelize, DataTypes) => {
       autoIncrement: true,
     },
     Valor: DataTypes.INTEGER,
+    qtdeAtivo: DataTypes.INTEGER,
     codCliente: DataTypes.INTEGER,
     codAtivo: DataTypes.INTEGER
   }, { timestamps: false });
   investmentTable.associate = (models) => {
-    investmentTable.hasOne(models.Asset, {foreignKey: 'id', as: 'asset'})
+    investmentTable.hasMany(models.Asset, {foreignKey: 'id', as: 'asset'})
     investmentTable.belongsTo(models.User, {foreignKey: 'id', as: 'user'} )
   }
 

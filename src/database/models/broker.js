@@ -1,3 +1,4 @@
+
 const Broker = (Sequelize, DataTypes) => {
   const brokerTable = Sequelize.define('Broker', {
     id: {

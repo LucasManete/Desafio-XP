@@ -10,10 +10,6 @@ module.exports = {
         name: 'Binance',
         cnpj: 54782,
       },
-      {
-        name: 'Binance',
-        cnpj: 54782,
-      },
     ],{ timestamps: false },
   ),
 

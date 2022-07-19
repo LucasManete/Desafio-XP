@@ -11,6 +11,9 @@ module.exports = {
       Valor: {
         type: Sequelize.INTEGER
       },
+      qtdeAtivo: {
+        type: Sequelize.INTEGER
+      },
       codCliente: {
         type: Sequelize.INTEGER,
         references: {

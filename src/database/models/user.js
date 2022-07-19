@@ -1,3 +1,4 @@
+
 const User = (Sequelize, DataTypes) => {
   const userTable = Sequelize.define('User', {
     id: {

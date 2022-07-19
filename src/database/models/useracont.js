@@ -1,3 +1,4 @@
+
 const userAcont = (Sequelize, DataTypes) => {
   const UserAcontTable = Sequelize.define('UserAcont', {
     id: {
@@ -9,6 +10,8 @@ const userAcont = (Sequelize, DataTypes) => {
     codCliente: DataTypes.INTEGER,
     codCorretora: DataTypes.INTEGER,
   }, { timestamps: false }); 
+
+  
   UserAcontTable.associate = (models) => {
     UserAcontTable.belongsTo(models.User, {foreignKey: 'id', as: 'user'})
     UserAcontTable.belongsToMany(models.Broker, {
