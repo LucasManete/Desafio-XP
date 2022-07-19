@@ -7,7 +7,10 @@ const getClient = async (req, res) => {
 };
 const buyAssetsController = async (req, res) => {
   const { codCliente, qtdeAtivo, codAtivo } = req.body;
-  const result = await investmentServices.buyAssets(codCliente, qtdeAtivo, codAtivo);
+  const { message, result } = await investmentServices.buyAssets(codCliente, qtdeAtivo, codAtivo);
+  if (message) {
+    return res.status(400).json({ alerta: message });
+  }
   return res.status(200).json(result);
 };
 
