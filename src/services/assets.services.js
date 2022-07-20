@@ -11,4 +11,9 @@ const findOneAsset = async (id) => {
   return renameAsset;
 };
 
-module.exports = { findOneAsset };
+const getAllAssets = async () => {
+  const result = await Asset.findAll({ attributes: { exclude: 'codCorretora' } });
+  return result;
+};
+
+module.exports = { findOneAsset, getAllAssets };

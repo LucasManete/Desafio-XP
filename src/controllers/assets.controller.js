@@ -6,4 +6,9 @@ const getOneAsset = async (req, res) => {
   return res.status(200).json(result);
 };
 
-module.exports = { getOneAsset };
+const getAllAsset = async (_req, res) => {
+  const result = await assetServices.getAllAssets();
+  return res.status(200).json(result);
+};
+
+module.exports = { getOneAsset, getAllAsset };

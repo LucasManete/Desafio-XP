@@ -5,6 +5,7 @@ const assetController = require('../controllers/assets.controller');
 const acontUserController = require('../controllers/acontUser.services');
 const investmentController = require('../controllers/investments.controller');
 
+router.get('/ativos', assetController.getAllAsset);
 router.get('/ativos/:id', assetController.getOneAsset);
 router.get('/conta/:id', acontUserController.getAcontUserController);
 router.get('/investments/ativos/:codCliente', investmentController.getClient);
