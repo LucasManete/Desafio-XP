@@ -14,4 +14,10 @@ const buyAssetsController = async (req, res) => {
   return res.status(200).json(result);
 };
 
-module.exports = { getClient, buyAssetsController };
+const sellAsset = async (req, res) => {
+  const { codCliente, qtdeAtivo, codAtivo } = req.body;
+  const result = await investmentServices.sellAssets(codCliente, qtdeAtivo, codAtivo);
+  return res.status(200).json(result);
+};
+
+module.exports = { getClient, buyAssetsController, sellAsset };

@@ -13,4 +13,5 @@ router.post('/conta/deposito', acontUserController.depositUserController);
 router.post('/conta/saque', acontUserController.withdrawUserController);
 
 router.post('/investments/buy', investmentController.buyAssetsController);
+router.post('/investments/sell', investmentController.sellAsset);
 module.exports = router;
