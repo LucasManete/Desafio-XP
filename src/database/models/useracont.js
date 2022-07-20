@@ -6,7 +6,7 @@ const userAcont = (Sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    Balance: DataTypes.INTEGER,
+    balance: DataTypes.DECIMAL(10,2),
     codCliente: DataTypes.INTEGER,
     codCorretora: DataTypes.INTEGER,
   }, { timestamps: false }); 

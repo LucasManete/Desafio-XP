@@ -8,14 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Name: {
+      name: {
         type: Sequelize.STRING
       },
-      Quantity: {
+      quantity: {
         type: Sequelize.INTEGER
       },
-      valor: {
-        type: Sequelize.INTEGER
+      value: {
+        type: Sequelize.DECIMAL(10,2)
       },
       codCorretora: {
         type: Sequelize.INTEGER,

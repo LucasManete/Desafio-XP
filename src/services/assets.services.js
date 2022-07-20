@@ -1,12 +1,12 @@
 const { Asset } = require('../database/models');
 
 const findOneAsset = async (id) => {
-  const { Quantity, valor, Name } = await Asset.findByPk(id, { attributes: { exclude: 'codCorretora' } });
+  const { quantity, name, value } = await Asset.findByPk(id, { attributes: { exclude: 'codCorretora' } });
   const renameAsset = {
-    CodAtivo: +id,
-    Name,
-    QtdeAtivo: Quantity,
-    Valor: valor,
+    codAtivo: +id,
+    name,
+    qtdeAtivo: quantity,
+    value,
   };
   return renameAsset;
 };

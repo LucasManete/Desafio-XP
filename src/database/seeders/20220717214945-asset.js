@@ -3,15 +3,21 @@ module.exports = {
     'Assets',
     [
       {
-        name:"Rico",
-        quantity: 15,
-        valor: 45,
+        name: 'Azul',
+        quantity: 542,
+        value: 75,
         codCorretora:2,
       },
       {
-        name:"XP",
-        quantity: 25,
-        valor: 150,
+        name: 'XP',
+        quantity: 500,
+        value: 500,
+        codCorretora:2,
+      },
+      {
+        name: 'Petrobras',
+        quantity: 300,
+        value: 65,
         codCorretora:2,
       },
     ],

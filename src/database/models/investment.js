@@ -5,7 +5,6 @@ const investment = (Sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    Valor: DataTypes.INTEGER,
     qtdeAtivo: DataTypes.INTEGER,
     codCliente: DataTypes.INTEGER,
     codAtivo: DataTypes.INTEGER

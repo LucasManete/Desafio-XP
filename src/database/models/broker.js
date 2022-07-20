@@ -6,8 +6,8 @@ const Broker = (Sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    Name: DataTypes.STRING,
-    Cnpj: DataTypes.INTEGER
+    name: DataTypes.STRING,
+    cnpj: DataTypes.INTEGER
   },  { timestamps: false });
   brokerTable.associate = (models) => {
     //conferir

@@ -2,29 +2,35 @@ module.exports = {
   up: async (queryInterface, Sequelize) => queryInterface.bulkInsert(
     'Investments',
     [
-      {
-        valor: 45,
+      { 
+        qtdeAtivo:100,
+        codCliente:1,
+        codAtivo:1,
+      },
+      { 
+        qtdeAtivo:100,
         codCliente:1,
         codAtivo:2,
-        qtdeAtivo:20,
       },
-      {
-        valor: 5478,
-        codCliente:2,
-        codAtivo:1,
+      { 
+        qtdeAtivo:100,
+        codCliente:1,
+        codAtivo:3,
+      },
+      { 
         qtdeAtivo:10,
-      },
-      {
-        valor: 75,
-        codCliente:1,
+        codCliente:2,
         codAtivo:1,
-        qtdeAtivo: 15,
       },
-      {
-        valor: 75,
+      { 
+        qtdeAtivo:120,
         codCliente:2,
         codAtivo:2,
-        qtdeAtivo: 15,
+      },
+      { 
+        qtdeAtivo:50,
+        codCliente:2,
+        codAtivo:3,
       },
     ],
 

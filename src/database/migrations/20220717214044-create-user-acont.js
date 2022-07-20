@@ -8,9 +8,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-
       balance: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL(10,2)
       },
       codCliente: {
         type: Sequelize.INTEGER,

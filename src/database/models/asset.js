@@ -5,9 +5,9 @@ const Asset = (Sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    Name: DataTypes.STRING,
-    Quantity: DataTypes.INTEGER,
-    valor: DataTypes.DECIMAL,
+    name: DataTypes.STRING,
+    quantity: DataTypes.INTEGER,
+    value: DataTypes.DECIMAL(10,2),
     codCorretora:DataTypes.INTEGER,
   },
   {

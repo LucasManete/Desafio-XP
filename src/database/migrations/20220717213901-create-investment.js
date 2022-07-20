@@ -8,9 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Valor: {
-        type: Sequelize.INTEGER
-      },
       qtdeAtivo: {
         type: Sequelize.INTEGER
       },

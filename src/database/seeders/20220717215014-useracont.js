@@ -3,12 +3,12 @@ module.exports = {
     'UserAconts',
     [
       {
-        balance: 45484,
+        balance: 4220.30,
         codCliente:1,
         codCorretora:2,
       },
       {
-        balance: 54,
+        balance: 4000.30,
         codCliente:2,
         codCorretora:2,
       },
