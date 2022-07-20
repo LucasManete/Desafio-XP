@@ -7,7 +7,9 @@ const User = (Sequelize, DataTypes) => {
       autoIncrement: true,
     },
     name: DataTypes.STRING,
-    document: DataTypes.INTEGER
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    document: DataTypes.STRING
   }, { timestamps: false });
   userTable.associate = (models) => {
     models.User.hasMany(models.Investment, {foreignKey: 'id', as: 'investment'})

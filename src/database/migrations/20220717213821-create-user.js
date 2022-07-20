@@ -11,12 +11,23 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+
       document: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
+
+      email:{
+        type: Sequelize.STRING
+      },
+
+      password: {
+        type: Sequelize.STRING
+      },
+
       createdAt: {
         type: Sequelize.DATE
       },
+
       updatedAt: {
         type: Sequelize.DATE
       }

@@ -4,10 +4,14 @@ module.exports = {
     [
       {
         name: 'Lucas',
+        email: 'lucas_teste@gmail.com',
+        password: '123456teste',
         document: 45484,
       },
       {
         name: 'Teste',
+        email: 'teste_teste@gmail.com',
+        password: '123456teste',
         document: 46484,
       },
     ],
