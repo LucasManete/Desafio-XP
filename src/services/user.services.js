@@ -1,4 +1,4 @@
-const { User } = require('../database/models');
+const { User, UserAcont } = require('../database/models');
 const { token } = require('../auth/AuthToken');
 
 const createUser = async ({
@@ -14,4 +14,9 @@ const createUser = async ({
   };
 };
 
-module.exports = { createUser };
+const createAcont = async (codCliente, balance, codCorretora) => {
+  const restult = await UserAcont.create(codCliente, balance, codCorretora);
+  return restult;
+};
+
+module.exports = { createUser, createAcont };

@@ -8,6 +8,7 @@ const userControler = require('../controllers/user.controller');
 const validateToken = require('../middlewares/validadeJWT');
 
 router.post('/user', userControler.createUser);
+router.post('/acont', userControler.createAcont);
 
 router.get('/ativos', validateToken, assetController.getAllAsset);
 router.get('/ativos/:id', validateToken, assetController.getOneAsset);
