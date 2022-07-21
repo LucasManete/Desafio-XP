@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const assetController = require('../controllers/assets.controller');
-const acontUserController = require('../controllers/acontUser.services');
+const acontUserController = require('../controllers/acontUser.controller');
 const investmentController = require('../controllers/investments.controller');
 const userControler = require('../controllers/user.controller');
 const validateToken = require('../middlewares/validadeJWT');

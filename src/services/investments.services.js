@@ -32,4 +32,5 @@ const sellAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   return { message: 'Venda realizada com sucesso!' };
 };
 
-module.exports = { findUserByInvestment, buyAssets, sellAssets };
+const investmentsService = { findUserByInvestment, buyAssets, sellAssets };
+module.exports = investmentsService;

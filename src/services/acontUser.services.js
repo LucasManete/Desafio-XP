@@ -14,7 +14,7 @@ const depositUser = async (codCliente, Valor) => {
   const byPk = await UserAcont.findByPk(codCliente);
   const Saldo = +byPk.dataValues.balance + Valor;
   await UserAcont.update({ balance: Saldo }, { where: { codCliente } });
-  const newBalance = await UserAcont.findByPk(codCliente);
+  const newBalance = await UserAcont.findByPk(codCliente, { attributes: { exclude: 'id' } });
   return newBalance;
 };
 
@@ -22,8 +22,10 @@ const withdrawUser = async (codCliente, Valor) => {
   const byPk = await UserAcont.findByPk(codCliente);
   const Saldo = +byPk.dataValues.balance - Valor;
   await UserAcont.update({ balance: Saldo }, { where: { codCliente } });
-  const newBalance = await UserAcont.findByPk(codCliente);
+  const newBalance = await UserAcont.findByPk(codCliente, { attributes: { exclude: 'id' } });
   return newBalance;
 };
 
-module.exports = { getBalanceUser, depositUser, withdrawUser };
+const userService = { getBalanceUser, depositUser, withdrawUser };
+
+module.exports = userService;

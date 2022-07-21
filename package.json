@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "test": "mocha src/test/**/*.test.js --exit"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +20,10 @@
     "sequelize-cli": "^6.4.1"
   },
   "devDependencies": {
+    "chai": "^4.3.6",
     "eslint": "^8.20.0",
-    "eslint-config-airbnb-base": "^15.0.0"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "mocha": "^10.0.0",
+    "sinon": "^14.0.0"
   }
 }
