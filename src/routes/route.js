@@ -6,18 +6,72 @@ const acontUserController = require('../controllers/acontUser.services');
 const investmentController = require('../controllers/investments.controller');
 const userControler = require('../controllers/user.controller');
 const validateToken = require('../middlewares/validadeJWT');
+const acontMiddleware = require('../middlewares/acontUserMiddleware');
+const assetMiddleware = require('../middlewares/assetsMiddleware');
+const investmentMiddleware = require('../middlewares/investmentsMiddleware');
 
-router.post('/user', userControler.createUser);
-router.post('/acont', userControler.createAcont);
+router.post(
+  '/user',
+  userControler.createUser,
+);
+router.post(
+  '/acont',
+  userControler.createAcont,
+);
 
-router.get('/ativos', validateToken, assetController.getAllAsset);
-router.get('/ativos/:id', validateToken, assetController.getOneAsset);
-router.get('/conta/:id', validateToken, acontUserController.getAcontUserController);
-router.get('/investments/ativos/:codCliente', validateToken, investmentController.getClient);
+router.get(
+  '/ativos',
+  validateToken,
+  assetController.getAllAsset,
+);
 
-router.post('/conta/deposito', acontUserController.depositUserController);
-router.post('/conta/saque', acontUserController.withdrawUserController);
+router.get(
+  '/ativos/:id',
+  assetMiddleware,
+  validateToken,
+  assetController.getOneAsset,
+);
 
-router.post('/investments/buy', validateToken, investmentController.buyAssetsController);
-router.post('/investments/sell', validateToken, investmentController.sellAsset);
+router.get(
+  '/conta/:id',
+  acontMiddleware.verifyAcont,
+  validateToken,
+  acontUserController.getAcontUserController,
+);
+
+router.get(
+  '/investments/ativos/:codCliente',
+  investmentMiddleware.userAssetsByCliente,
+  validateToken,
+  investmentController.getClient,
+);
+
+router.post(
+  '/conta/deposito',
+  validateToken,
+  acontMiddleware.verifyDepositAcont,
+  acontUserController.depositUserController,
+);
+
+router.post(
+  '/conta/saque',
+  validateToken,
+  acontMiddleware.verifyWithdrwalAcont,
+  acontUserController.withdrawUserController,
+);
+
+router.post(
+  '/investments/buy',
+  investmentMiddleware.BuyAssetsMiddleware,
+  validateToken,
+  investmentController.buyAssetsController,
+);
+
+router.post(
+  '/investments/sell',
+  investmentMiddleware.SellAssetsMiddleware,
+  validateToken,
+  investmentController.sellAsset,
+);
+
 module.exports = router;

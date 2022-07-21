@@ -8,21 +8,15 @@ const getClient = async (req, res) => {
 
 const buyAssetsController = async (req, res) => {
   const { codCliente, qtdeAtivo, codAtivo } = req.body;
-  const { message, result } = await investmentServices.buyAssets(codCliente, qtdeAtivo, codAtivo);
-  if (message) {
-    return res.status(400).json({ alerta: message });
-  }
+  const result = await investmentServices.buyAssets(codCliente, qtdeAtivo, codAtivo);
   return res.status(200).json(result);
 };
 
 const sellAsset = async (req, res) => {
   const { codCliente, qtdeAtivo, codAtivo } = req.body;
-  const { message, getNewQuantity } = await investmentServices
+  const result = await investmentServices
     .sellAssets(codCliente, qtdeAtivo, codAtivo);
-  if (message) {
-    return res.status(400).json({ alerta: message });
-  }
-  return res.status(200).json(getNewQuantity);
+  return res.status(200).json(result);
 };
 
 module.exports = { getClient, buyAssetsController, sellAsset };

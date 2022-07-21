@@ -8,20 +8,14 @@ const getAcontUserController = async (req, res) => {
 
 const depositUserController = async (req, res) => {
   const { codCliente, Valor } = req.body;
-  const { message, data, statusCode } = await AcontServices.depositUser(codCliente, Valor);
-  if (message) {
-    return res.status(statusCode).json({ Alerta: message });
-  }
-  return res.status(statusCode).json(data);
+  const result = await AcontServices.depositUser(codCliente, Valor);
+  return res.status(200).json(result);
 };
 
 const withdrawUserController = async (req, res) => {
   const { codCliente, Valor } = req.body;
-  const { data, message, statusCode } = await AcontServices.withdrawUser(codCliente, Valor);
-  if (message) {
-    return res.status(statusCode).json({ Alerta: message });
-  }
-  return res.status(statusCode).json(data);
+  const result = await AcontServices.withdrawUser(codCliente, Valor);
+  return res.status(200).json(result);
 };
 
 module.exports = { getAcontUserController, depositUserController, withdrawUserController };
