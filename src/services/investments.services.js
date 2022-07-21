@@ -1,14 +1,11 @@
-const { Investment, Asset } = require('../database/models');
+const { Investment, Asset, sequelize } = require('../database/models');
 
 const findUserByInvestment = async (codCliente) => {
-  const result = await Investment.findOne({
-    where: { codCliente },
-    attributes: { exclude: 'id' },
-    include: [
-      { model: Asset, as: 'asset' },
-    ],
-  });
-  return result;
+  const result = await sequelize.query(`SELECT I.codCliente, I.codAtivo, I.qtdeAtivo, A.value FROM Investments as I
+  INNER JOIN Assets as A on I.codAtivo = A.id
+  WHERE I.codCliente = ${codCliente}`);
+  const resultado = result[0];
+  return resultado;
 };
 
 const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
