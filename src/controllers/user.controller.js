@@ -1,13 +1,11 @@
 const userServices = require('../services/user.services');
 
-const createUser = async (req, res) => {
-  const { secret } = await userServices.createUser(req.body);
-  return res.status(201).json({ token: secret });
+const loginUser = async (req, res) => {
+  const secret = await userServices.loginUser(req.body);
+  if (secret.message) {
+    return res.status(secret.status).json({ alerta: secret.message });
+  }
+  return res.status(200).json({ token: secret });
 };
 
-const createAcont = async (req, res) => {
-  const result = await userServices.createAcont(req.body);
-  return res.status(201).json(result);
-};
-
-module.exports = { createUser, createAcont };
+module.exports = { loginUser };

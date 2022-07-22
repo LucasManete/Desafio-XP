@@ -1,14 +1,12 @@
 const { Asset } = require('../database/models');
 
 const findOneAsset = async (id) => {
-  const { quantity, name, value } = await Asset.findByPk(id, { attributes: { exclude: 'codCorretora' } });
-  const renameAsset = {
-    codAtivo: +id,
-    name,
-    qtdeAtivo: quantity,
-    value,
-  };
-  return renameAsset;
+  const resultQuery = await Asset.findByPk(id, { attributes: { exclude: 'id, codCorretora' } });
+  if (!resultQuery) {
+    const result = ({ status: 404, message: 'Ativo não encontrado' });
+    return result;
+  }
+  return resultQuery;
 };
 
 const getAllAssets = async () => {

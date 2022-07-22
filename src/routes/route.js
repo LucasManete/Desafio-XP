@@ -6,70 +6,227 @@ const acontUserController = require('../controllers/acontUser.controller');
 const investmentController = require('../controllers/investments.controller');
 const userControler = require('../controllers/user.controller');
 const validateToken = require('../middlewares/validadeJWT');
-const acontMiddleware = require('../middlewares/acontUserMiddleware');
-const assetMiddleware = require('../middlewares/assetsMiddleware');
-const investmentMiddleware = require('../middlewares/investmentsMiddleware');
 
+/**
+ * @swagger
+ * tags:
+ *     name: DesafioXP
+ *     description: Endpoints do desafio
+ */
 router.post(
-  '/user',
-  userControler.createUser,
+  '/usuario',
+  userControler.loginUser,
 );
-router.post(
-  '/acont',
-  userControler.createAcont,
-);
-
+/**
+ * @swagger
+ * /ativos:
+ *    get:
+ *        tags: [DesafioXP]
+ *        description: Retorna uma lista de ativos
+ *        security:
+ *          - bearerAuth: []
+ *        responses:
+ *            200:
+ *              content:
+ *                application/json:
+ *                  schema:
+ *                     type: array
+ */
 router.get(
   '/ativos',
   validateToken,
   assetController.getAllAsset,
 );
 
+/**
+ * @swagger
+ * /ativos/{id}:
+ *    get:
+ *        tags: [DesafioXP]
+ *        description: Retorna um ativo por id
+ *        security:
+ *          - bearerAuth: []
+ *        parameters:
+ *          - in: path
+ *            name: id
+ *            type: string
+ *            required: true
+ *        responses:
+ *            200:
+ *              content:
+ *                application/json:
+ *                  schema:
+ *                     type: object
+ *
+ */
 router.get(
   '/ativos/:id',
-  assetMiddleware,
   validateToken,
   assetController.getOneAsset,
 );
 
+/**
+ * @swagger
+ * /conta/{id}:
+ *    get:
+ *        tags: [DesafioXP]
+ *        description: Retorna uma conta por id
+ *        security:
+ *          - bearerAuth: []
+ *        parameters:
+ *          - in: path
+ *            name: id
+ *            type: string
+ *            required: true
+ *        responses:
+ *            200:
+ *              content:
+ *                application/json:
+ *                  schema:
+ *                     type: object
+ */
+
 router.get(
   '/conta/:id',
-  acontMiddleware.verifyAcont,
   validateToken,
   acontUserController.getAcontUserController,
 );
 
+/**
+ * @swagger
+ * /investimentos/ativos/{codCliente}:
+ *    get:
+ *        tags: [DesafioXP]
+ *        description: Retorna todos os ativo de um cliente
+ *        security:
+ *          - bearerAuth: []
+ *        parameters:
+ *          - in: path
+ *            name: id
+ *            type: string
+ *            required: true
+ *        responses:
+ *            200:
+ *              content:
+ *                application/json:
+ *                  schema:
+ *                     type: object
+ */
+
 router.get(
-  '/investments/ativos/:codCliente',
-  investmentMiddleware.userAssetsByCliente,
+  '/investimentos/ativos/:codCliente',
   validateToken,
   investmentController.getClient,
 );
 
+/**
+ * @swagger
+ * /conta/deposito:
+ *    post:
+ *      description: Retorna o valor atualizado da conta depois do deposito
+ *      tags: [DesafioXP]
+ *      security:
+ *          - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *           schema:
+ *             type: object
+ *    responses:
+ *      200:
+ *       content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ */
+
 router.post(
   '/conta/deposito',
   validateToken,
-  acontMiddleware.verifyDepositAcont,
   acontUserController.depositUserController,
 );
+
+/**
+ * @swagger
+ * /conta/saque:
+ *    post:
+ *      description: Retorna o saldo restante na conta do cliente
+ *      tags: [DesafioXP]
+ *      security:
+ *          - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *           schema:
+ *             type: object
+ *    responses:
+ *      200:
+ *       content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ */
 
 router.post(
   '/conta/saque',
   validateToken,
-  acontMiddleware.verifyWithdrwalAcont,
   acontUserController.withdrawUserController,
 );
 
+/**
+ * @swagger
+ * /investimentos/comprar:
+ *    post:
+ *      description: Retorna a seguinte messagem:Compra realizada com sucesso!
+ *      tags: [DesafioXP]
+ *      security:
+ *          - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *           schema:
+ *             type: object
+ *    responses:
+ *      200:
+ *       content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ */
+
 router.post(
-  '/investments/buy',
-  investmentMiddleware.BuyAssetsMiddleware,
+  '/investimentos/comprar',
   validateToken,
   investmentController.buyAssetsController,
 );
 
+/**
+ * @swagger
+ * /investimentos/vender:
+ *    post:
+ *      description: Retorna a seguinte messagem:Venda realizada com sucesso!
+ *      tags: [DesafioXP]
+ *      security:
+ *          - bearerAuth: []
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *           schema:
+ *             type: object
+ *    responses:
+ *      200:
+ *       content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ */
+
 router.post(
-  '/investments/sell',
-  investmentMiddleware.SellAssetsMiddleware,
+  '/investimentos/vender',
   validateToken,
   investmentController.sellAsset,
 );
