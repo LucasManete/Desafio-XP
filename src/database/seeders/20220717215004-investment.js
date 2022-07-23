@@ -3,34 +3,34 @@ module.exports = {
     'Investments',
     [
       { 
-        qtdeAtivo:100,
         codCliente:1,
         codAtivo:1,
+        qtdeAtivo:20,
       },
       { 
-        qtdeAtivo:100,
         codCliente:1,
         codAtivo:2,
-      },
-      { 
-        qtdeAtivo:100,
-        codCliente:1,
-        codAtivo:3,
-      },
-      { 
         qtdeAtivo:10,
+      },
+      { 
+        codCliente:1,
+        codAtivo:3,
+        qtdeAtivo:15,
+      },
+      { 
         codCliente:2,
         codAtivo:1,
+        qtdeAtivo:40,
       },
       { 
-        qtdeAtivo:120,
         codCliente:2,
         codAtivo:2,
+        qtdeAtivo:85,
       },
       { 
-        qtdeAtivo:50,
         codCliente:2,
         codAtivo:3,
+        qtdeAtivo:43,
       },
     ],
 

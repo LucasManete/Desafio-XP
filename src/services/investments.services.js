@@ -1,7 +1,7 @@
 const { Investment, Asset, sequelize } = require('../database/models');
 
 const findUserByInvestment = async (codCliente) => {
-  const resultQuery = await sequelize.query(`SELECT I.codCliente, I.codAtivo, I.qtdeAtivo, A.value FROM Investments as I
+  const resultQuery = await sequelize.query(`SELECT I.codCliente, I.codAtivo, I.qtdeAtivo, I.qtdeAtivo * A.value as ValorInvestido, A.value as ValorAcao FROM Investments as I
   INNER JOIN Assets as A on I.codAtivo = A.id
   WHERE I.codCliente = ${codCliente}`);
   const resultado = resultQuery[0];
@@ -51,6 +51,10 @@ const sellAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   }
   if (qtdeAtivo > getUser.dataValues.qtdeAtivo || getUser.dataValues.qtdeAtivo === 0) {
     const result = ({ status: 400, message: 'Quantidade insuficiente de ativos na carteira' });
+    return result;
+  }
+  if (qtdeAtivo <= 0) {
+    const result = ({ status: 400, message: 'Valor de venda inválido' });
     return result;
   }
 

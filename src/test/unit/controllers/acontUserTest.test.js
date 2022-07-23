@@ -51,7 +51,6 @@
 
 //   it('Retorna o "status 404"', async () => {
 //     const teste = await acontController.getAcontUserController(request, response);
-//     console.log(teste);
 //     expect(response.status.calledWith(404)).to.be.equal(true);
 //   });
 

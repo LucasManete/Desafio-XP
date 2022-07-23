@@ -4,10 +4,11 @@ const SECRET = process.env.JWT_SECRET;
 
 // eslint-disable-next-line consistent-return
 const validateToken = async (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) {
+  const auth = req.headers.authorization;
+  if (!auth) {
     return res.status(401).json({ message: 'Token not found' });
   }
+  const [, token] = auth.split(' ');
   try {
     jwt.verify(token, SECRET);
     next();

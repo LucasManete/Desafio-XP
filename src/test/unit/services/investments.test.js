@@ -65,3 +65,123 @@ describe('(camada service) Testa o retorno da API para conta de clientes que nã
     expect(response).to.have.property('message').contain('Usuario não encontrado');
   });
 });
+
+describe('(camada service) Testa o retorno da API para compra de ativos', () => {
+  const bancoDados = { message: 'Compra realizada com sucesso!' };
+
+  before(async () => {
+    sinon.stub(investmentsService, 'buyAssets').resolves(bancoDados);
+  });
+
+  after(() => {
+    investmentsService.buyAssets.restore();
+  });
+  it('Retorna um objeto message', async () => {
+    const response = await investmentsService.buyAssets();
+    expect(response).to.have.property('message');
+  });
+  it('Retorna um objeto message com conteúdo', async () => {
+    const response = await investmentsService.buyAssets();
+    expect(response).to.have.property('message').contain('Compra realizada com sucesso!');
+  });
+});
+
+describe('(camada service) Testa o retorno da API para erro na compra de ativo', () => {
+  const bancoDados = { message: 'Usuario não encontrado' };
+
+  before(async () => {
+    sinon.stub(investmentsService, 'buyAssets').resolves(bancoDados);
+  });
+
+  after(() => {
+    investmentsService.buyAssets.restore();
+  });
+  it('Retorna um objeto message', async () => {
+    const response = await investmentsService.buyAssets();
+    expect(response).to.have.property('message');
+  });
+  it('Retorna um objeto message com conteúdo', async () => {
+    const response = await investmentsService.buyAssets();
+    expect(response).to.have.property('message').contain('Usuario não encontrado');
+  });
+});
+
+describe('(camada service) Testa o retorno da API para erro na compra de ativo', () => {
+  const bancoDados = { message: 'Quantidade insuficiente de ativos na corretora' };
+
+  before(async () => {
+    sinon.stub(investmentsService, 'buyAssets').resolves(bancoDados);
+  });
+
+  after(() => {
+    investmentsService.buyAssets.restore();
+  });
+  it('Retorna um objeto message', async () => {
+    const response = await investmentsService.buyAssets();
+    expect(response).to.have.property('message');
+  });
+  it('Retorna um objeto message com conteúdo', async () => {
+    const response = await investmentsService.buyAssets();
+    expect(response).to.have.property('message').contain('Quantidade insuficiente de ativos na corretora');
+  });
+});
+
+describe('(camada service) Testa o retorno da API para venda de ativos', () => {
+  const bancoDados = { message: 'Venda realizada com sucesso!' };
+
+  before(async () => {
+    sinon.stub(investmentsService, 'sellAssets').resolves(bancoDados);
+  });
+
+  after(() => {
+    investmentsService.sellAssets.restore();
+  });
+  it('Retorna um objeto message', async () => {
+    const response = await investmentsService.sellAssets();
+    expect(response).to.have.property('message');
+  });
+  it('Retorna um objeto message com conteúdo', async () => {
+    const response = await investmentsService.sellAssets();
+    expect(response).to.have.property('message').contain('Venda realizada com sucesso!');
+  });
+});
+
+describe('(camada service) Testa o retorno da API para erros na venda de ativos', () => {
+  const bancoDados = { message: 'Usuario não encontrado' };
+
+  before(async () => {
+    sinon.stub(investmentsService, 'sellAssets').resolves(bancoDados);
+  });
+
+  after(() => {
+    investmentsService.sellAssets.restore();
+  });
+  it('Retorna um objeto message', async () => {
+    const response = await investmentsService.sellAssets();
+    expect(response).to.have.property('message');
+  });
+  it('Retorna um objeto message com conteúdo', async () => {
+    const response = await investmentsService.sellAssets();
+    expect(response).to.have.property('message').contain('Usuario não encontrado');
+  });
+});
+
+describe('(camada service) Testa o retorno da API para erros na venda de ativos', () => {
+  const bancoDados = { message: 'Quantidade insuficiente de ativos na carteira' };
+
+  before(async () => {
+    sinon.stub(investmentsService, 'sellAssets').resolves(bancoDados);
+  });
+
+  after(() => {
+    investmentsService.sellAssets.restore();
+  });
+  it('Retorna um objeto message', async () => {
+    const response = await investmentsService.sellAssets();
+    expect(response).to.have.property('message');
+  });
+  it('Retorna um objeto message com conteúdo', async () => {
+    const response = await investmentsService.sellAssets();
+    expect(response).to.have.property('message').contain('Quantidade insuficiente de ativos na carteira');
+  });
+});

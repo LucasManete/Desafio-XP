@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const express = require('express');
 
 const router = express.Router();
@@ -13,6 +14,45 @@ const validateToken = require('../middlewares/validadeJWT');
  *     name: DesafioXP
  *     description: Endpoints do desafio
  */
+
+/**
+ * @swagger
+ * /usuario:
+ *    post:
+ *        tags: [DesafioXP]
+ *        description: Retorna o token para navegação em outras rotas
+ *        security:
+ *          - bearerAuth: []
+ *        requestBody:
+ *            required: true
+ *            content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 name: teste
+ *                 email: teste_teste@gmail.com
+ *                 password: 123456teste
+ *        responses:
+ *           200:
+ *             description: 'Retorna o token do usuario'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 {token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6eyJuYW1lIjoiVGVzdGUiLCJlbWFpbCI6InRlc3RlX3Rlc3RlQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiMTIzNDU2dGVzdGUifSwiaWF0IjoxNjU4NTIwOTk0LCJleHAiOjE2NTkxMjU3OTR9.8ffVEBez_zu-oUdehq9TApbCqrs8pLCqQwKNbp2GhV8"}
+ *           404:
+ *             description: 'Retorna o token do usuario'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 {message: usuario inválido }
+ *
+ *
+ */
 router.post(
   '/usuario',
   userControler.loginUser,
@@ -22,15 +62,37 @@ router.post(
  * /ativos:
  *    get:
  *        tags: [DesafioXP]
- *        description: Retorna uma lista de ativos
+ *        description: Retorna todos os ativos
  *        security:
  *          - bearerAuth: []
  *        responses:
- *            200:
- *              content:
- *                application/json:
- *                  schema:
- *                     type: array
+ *           200:
+ *             description: 'Retorna um Array com todos os ativos'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: array
+ *                 example:
+ *                    [
+ *                       {
+ *                          codCliente:1
+ *                          name:Azul
+ *                          quantity:542
+ *                          value:75
+ *                       },
+ *                       {
+ *                          codCliente:1
+ *                          name:Azul
+ *                          quantity:542
+ *                          value:75
+ *                       },
+ *                      {
+ *                          codCliente:1
+ *                          name:Azul
+ *                          quantity:542
+ *                          value:75
+ *                       }
+ *                    ]
  */
 router.get(
   '/ativos',
@@ -43,7 +105,7 @@ router.get(
  * /ativos/{id}:
  *    get:
  *        tags: [DesafioXP]
- *        description: Retorna um ativo por id
+ *        description: Retorna um ativo por ID
  *        security:
  *          - bearerAuth: []
  *        parameters:
@@ -52,12 +114,32 @@ router.get(
  *            type: string
  *            required: true
  *        responses:
- *            200:
- *              content:
- *                application/json:
- *                  schema:
- *                     type: object
- *
+ *           200:
+ *             description: 'Retorna um ativo por id'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 name: Azul
+ *                 quantity: 544
+ *                 value: 75.00
+  *           401:
+ *             description: 'Token not Found'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Token not Found'}
+ *           404:
+ *             description: 'Ativo inválido'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Ativo não encontrado'}
  */
 router.get(
   '/ativos/:id',
@@ -79,11 +161,32 @@ router.get(
  *            type: string
  *            required: true
  *        responses:
- *            200:
- *              content:
- *                application/json:
- *                  schema:
- *                     type: object
+ *           200:
+ *             description: 'Retorna a conta do usuario'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 codCliente: 1
+ *                 codCorretora: 2
+ *                 balance: 23.30
+  *           401:
+ *             description: 'Token not Found'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Token not Found'}
+ *           404:
+ *             description: 'Conta inválida'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Conta inválida'}
  */
 
 router.get(
@@ -97,7 +200,7 @@ router.get(
  * /investimentos/ativos/{codCliente}:
  *    get:
  *        tags: [DesafioXP]
- *        description: Retorna todos os ativo de um cliente
+ *        description: Retorna todos os ativos relacionados a um cliente
  *        security:
  *          - bearerAuth: []
  *        parameters:
@@ -106,11 +209,52 @@ router.get(
  *            type: string
  *            required: true
  *        responses:
- *            200:
- *              content:
- *                application/json:
- *                  schema:
- *                     type: object
+ *           200:
+ *             description: 'Retorna a conta do usuario'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: array
+ *                 example:
+ *                    [
+ *                       {
+ *                          codCliente:1
+ *                          codAtivo:1
+ *                          qtdeAtivo:20
+ *                          ValorInvestido:1500.00
+ *                          valorAcao:75.00
+ *                       },
+ *                       {
+ *                          codCliente:1
+ *                          codAtivo:2
+ *                          qtdeAtivo:10
+ *                          ValorInvestido:5000.00
+ *                          ValorAcao:500.00
+ *                       },
+ *                      {
+ *                          codCliente:1
+ *                          codAtivo:3
+ *                          qtdeAtivo:15
+ *                          ValorInvestido:975.00
+ *                          valorAcao:65.00
+ *                       }
+ *                    ]
+ *           401:
+ *             description: 'Token not Found'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Token not Found'}
+ *           404:
+ *             description: 'Conta inválida'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'usuario inválida'}
  */
 
 router.get(
@@ -123,22 +267,47 @@ router.get(
  * @swagger
  * /conta/deposito:
  *    post:
- *      description: Retorna o valor atualizado da conta depois do deposito
- *      tags: [DesafioXP]
- *      security:
+ *        tags: [DesafioXP]
+ *        description: Retorna um objeto com o valor atualizado
+ *        security:
  *          - bearerAuth: []
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *           schema:
- *             type: object
- *    responses:
- *      200:
- *       content:
- *        application/json:
- *         schema:
- *           type: object
+ *        requestBody:
+ *            required: true
+ *            content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 codCliente: 1
+ *                 valor: 400.30
+ *        responses:
+ *           200:
+ *             description: 'Retorna o saldo atualizado'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 balance: 4230.20
+ *                 codCliente: 1
+ *                 codCorretora: 2
+  *           401:
+ *             description: 'Token not Found'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Token not Found'}
+ *           404:
+ *             description: 'Conta inválida'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Conta inválida'}
+ *
  */
 
 router.post(
@@ -151,22 +320,47 @@ router.post(
  * @swagger
  * /conta/saque:
  *    post:
- *      description: Retorna o saldo restante na conta do cliente
- *      tags: [DesafioXP]
- *      security:
+ *        tags: [DesafioXP]
+ *        description: Retorna um objeto com o valor atualizado
+ *        security:
  *          - bearerAuth: []
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *           schema:
- *             type: object
- *    responses:
- *      200:
- *       content:
- *        application/json:
- *         schema:
- *           type: object
+ *        requestBody:
+ *            required: true
+ *            content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 codCliente: 1
+ *                 valor: 400.30
+ *        responses:
+ *           200:
+ *             description: 'Retorna o saldo atualizado'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 codCliente: 1
+ *                 codCorretora: 2
+ *                 balance: 4230.20
+  *           401:
+ *             description: 'Token not Found'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Token not Found'}
+ *           404:
+ *             description: 'Conta inválida'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Conta inválida'}
+ *
  */
 
 router.post(
@@ -179,22 +373,46 @@ router.post(
  * @swagger
  * /investimentos/comprar:
  *    post:
- *      description: Retorna a seguinte messagem:Compra realizada com sucesso!
- *      tags: [DesafioXP]
- *      security:
+ *        tags: [DesafioXP]
+ *        description: Retorna uma mensagem de sucesso ou erro
+ *        security:
  *          - bearerAuth: []
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *           schema:
- *             type: object
- *    responses:
- *      200:
- *       content:
- *        application/json:
- *         schema:
- *           type: object
+ *        requestBody:
+ *            required: true
+ *            content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 codCliente: 1
+ *                 qtdeAtivo: 20
+ *                 codAtivo: 2
+ *        responses:
+ *           200:
+ *             description: 'Retorna o saldo atualizado'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 {message: 'Compra realizada com sucesso'}
+  *           401:
+ *             description: 'Token not Found'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Token not Found'}
+ *           404:
+ *             description: 'Conta inválida'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Ativo não encontrado'}
+ *
  */
 
 router.post(
@@ -207,22 +425,55 @@ router.post(
  * @swagger
  * /investimentos/vender:
  *    post:
- *      description: Retorna a seguinte messagem:Venda realizada com sucesso!
- *      tags: [DesafioXP]
- *      security:
+ *        tags: [DesafioXP]
+ *        description: Retorna uma mensagem de sucesso ou erro
+ *        security:
  *          - bearerAuth: []
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *           schema:
- *             type: object
- *    responses:
- *      200:
- *       content:
- *        application/json:
- *         schema:
- *           type: object
+ *        requestBody:
+ *            required: true
+ *            content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 codCliente: 1
+ *                 qtdeAtivo: 20
+ *                 codAtivo: 2
+ *        responses:
+ *           200:
+ *             description: 'Retorna uma mensagem'
+ *             content:
+ *              application/json:
+ *               schema:
+ *                 type: object
+ *               example:
+ *                 {message: 'Venda realizada com sucesso!'}
+ *           401:
+ *             description: 'Token not Found'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Token not Found'}
+ *           400:
+ *             description: 'Ativos insuficientes na carteira'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Quantidade insuficiente de ativos na carteira'}
+ *           404:
+ *             description: 'Conta inválida'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Usuario não encontrado'}
+ *
+ *
  */
 
 router.post(
