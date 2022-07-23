@@ -62,9 +62,9 @@ de negócio e a lógica necessária e devolver uma resposta ao controllers.
 - Rode o comando **docker-compose up -d**
 - Entre no container com o comando **docker exec -ti desafioXP bash**
 - Rode o comando **npm install** para instalar as depedências do projeto.
-- Rode o comando **npx sequelize db:create** (Para criar o Bando de dados)
+- Rode o comando **npx sequelize db:create** (Para criar o Banco de dados)
 - Rode o comando **npx sequelize db:migrate** (Para criar as Tabelas)
-- Rode o comando **npx sequelize db:seed:all** (Para criar Criar alguns dados nas tabelas)
+- Rode o comando **npx sequelize db:seed:all** (Para criar alguns dados nas tabelas)
 - Rode o comando **npm run dev** dentro do container para subir o servidor.
 
 #### Próximos passos
