@@ -1,4 +1,9 @@
-const { Investment, Asset, sequelize } = require('../database/models');
+const {
+  Investment,
+  Asset,
+  UserAcont,
+  sequelize,
+} = require('../database/models');
 
 const findUserByInvestment = async (codCliente) => {
   const resultQuery = await sequelize.query(`SELECT I.codCliente, I.codAtivo, I.qtdeAtivo, I.qtdeAtivo * A.value as ValorInvestido, A.value as ValorAcao FROM Investments as I
@@ -14,7 +19,8 @@ const findUserByInvestment = async (codCliente) => {
 
 const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   const getUser = await Investment.findOne({ attributes: ['id', 'qtdeAtivo'], where: { codCliente, codAtivo } });
-  const getAsset = await Asset.findOne({ attributes: ['id', 'quantity'], where: { id: codAtivo } });
+  const getAsset = await Asset.findOne({ attributes: ['id', 'quantity', 'value'], where: { id: codAtivo } });
+  const getAcont = await UserAcont.findOne({ attributes: ['id', 'balance'], where: { id: codCliente } });
 
   if (!getAsset) {
     const result = ({ status: 404, message: 'Ativo não encontrado' });
@@ -29,9 +35,18 @@ const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
     return result;
   }
 
+  const custoTotal = getAsset.dataValues.value * qtdeAtivo;
+
+  if (getAcont.dataValues.balance < custoTotal) {
+    const result = ({ status: 400, message: 'Valor insuficiente para compra' });
+    return result;
+  }
+
   const assets = getUser.dataValues.qtdeAtivo + qtdeAtivo;
   const quantityAtt = getAsset.dataValues.quantity - qtdeAtivo;
+  const valorAttDaConta = getAcont.dataValues.balance - custoTotal;
 
+  await UserAcont.update({ balance: valorAttDaConta }, { where: { codCliente } });
   await Investment.update({ qtdeAtivo: assets }, { where: { codCliente, codAtivo } });
   await getAsset.update({ quantity: quantityAtt }, { where: { codAtivo } });
   return { status: 200, message: 'Compra realizada com sucesso!' };
@@ -39,7 +54,8 @@ const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
 
 const sellAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   const getUser = await Investment.findOne({ attributes: ['id', 'qtdeAtivo'], where: { codCliente, codAtivo } });
-  const getAsset = await Asset.findOne({ attributes: ['id', 'quantity'], where: { id: codAtivo } });
+  const getAsset = await Asset.findOne({ attributes: ['id', 'quantity', 'value'], where: { id: codAtivo } });
+  const getAcont = await UserAcont.findOne({ attributes: ['id', 'balance'], where: { id: codCliente } });
 
   if (!getAsset) {
     const result = ({ status: 404, message: 'Ativo não encontrado' });
@@ -58,10 +74,13 @@ const sellAssets = async (codCliente, qtdeAtivo, codAtivo) => {
     return result;
   }
 
+  const custoTotal = getAsset.dataValues.value * qtdeAtivo;
   const assets = getUser.dataValues.qtdeAtivo - qtdeAtivo;
   const quantityAtt = getAsset.dataValues.quantity + qtdeAtivo;
+  const valorAttDaConta = +getAcont.dataValues.balance + custoTotal;
 
   await Investment.update({ qtdeAtivo: assets }, { where: { codCliente, codAtivo } });
+  await UserAcont.update({ balance: valorAttDaConta }, { where: { codCliente } });
   await getAsset.update({ quantity: quantityAtt }, { where: { codAtivo } });
   return { status: 200, message: 'Venda realizada com sucesso!' };
 };

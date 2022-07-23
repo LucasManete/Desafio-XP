@@ -2,6 +2,7 @@
 const express = require('express');
 
 const router = express.Router();
+// const validadeBuy = require('../helpers/validateBuyAssets');
 const assetController = require('../controllers/assets.controller');
 const acontUserController = require('../controllers/acontUser.controller');
 const investmentController = require('../controllers/investments.controller');
@@ -400,6 +401,7 @@ router.post(
 router.post(
   '/investimentos/comprar',
   validateToken,
+  // validadeBuy,
   investmentController.buyAssetsController,
 );
 

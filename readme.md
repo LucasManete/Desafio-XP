@@ -12,13 +12,17 @@ A aquitetura pensada foi a **`MSC`**.
 
 ![estrutura](./src/public/pastas.jpeg)
 
+## Estrutura do Banco
+
+![estrutura](./src/public/BDEscuropng.png)
+
 **`MSC`** - MODEL, SERVICES e CONTROLLERS
 
 - #### API
 
 1. Pasta Controllers se dedica apenas para receber requisições e repassar para camada de services, receber sua resposta e repassar para rota da aplicação.
 
-2. Pasta de middlewares ficam os middlewares, neste projeto possui 5 middlewares para validação dos campos.
+2. Pasta de middlewares ficam os middlewares, neste projeto possui 1 middleware para validação do JWT.
 
 3. Pasta routers contém as rotas da aplicação.
 
@@ -58,9 +62,9 @@ de negócio e a lógica necessária e devolver uma resposta ao controllers.
 - Rode o comando **docker-compose up -d**
 - Entre no container com o comando **docker exec -ti desafioXP bash**
 - Rode o comando **npm install** para instalar as depedências do projeto.
-- Rode o comando npx sequelize db:create (Para criar o Bando de dados)
-- Rode o comando npx sequelize db:migrate (Para criar as Tabelas)
-- Rode o comando npx sequelize db:seed:all (Para criar Criar alguns dados nas tabelas)
+- Rode o comando **npx sequelize db:create** (Para criar o Bando de dados)
+- Rode o comando **npx sequelize db:migrate** (Para criar as Tabelas)
+- Rode o comando **npx sequelize db:seed:all** (Para criar Criar alguns dados nas tabelas)
 - Rode o comando **npm run dev** dentro do container para subir o servidor.
 
 #### Próximos passos
