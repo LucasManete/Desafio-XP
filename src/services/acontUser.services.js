@@ -32,7 +32,7 @@ const withdrawUser = async (codCliente, Valor) => {
     return result;
   }
   if (Valor > byPk.dataValues.balance || Valor < 0 || Valor === 0) {
-    const result = { status: 404, message: 'Valor inválido' };
+    const result = { status: 400, message: 'Valor inválido' };
     return result;
   }
   const Saldo = +byPk.dataValues.balance - Valor;

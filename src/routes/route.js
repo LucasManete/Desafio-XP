@@ -80,18 +80,6 @@ router.post(
  *                          quantity:542
  *                          value:75
  *                       },
- *                       {
- *                          codCliente:1
- *                          name:Azul
- *                          quantity:542
- *                          value:75
- *                       },
- *                      {
- *                          codCliente:1
- *                          name:Azul
- *                          quantity:542
- *                          value:75
- *                       }
  *                    ]
  */
 router.get(
@@ -205,7 +193,7 @@ router.get(
  *          - bearerAuth: []
  *        parameters:
  *          - in: path
- *            name: id
+ *            name: codCliente
  *            type: string
  *            required: true
  *        responses:
@@ -224,20 +212,6 @@ router.get(
  *                          ValorInvestido:1500.00
  *                          valorAcao:75.00
  *                       },
- *                       {
- *                          codCliente:1
- *                          codAtivo:2
- *                          qtdeAtivo:10
- *                          ValorInvestido:5000.00
- *                          ValorAcao:500.00
- *                       },
- *                      {
- *                          codCliente:1
- *                          codAtivo:3
- *                          qtdeAtivo:15
- *                          ValorInvestido:975.00
- *                          valorAcao:65.00
- *                       }
  *                    ]
  *           401:
  *             description: 'Token not Found'
@@ -279,7 +253,7 @@ router.get(
  *                 type: object
  *               example:
  *                 codCliente: 1
- *                 valor: 400.30
+ *                 Valor: 400.30
  *        responses:
  *           200:
  *             description: 'Retorna o saldo atualizado'
@@ -291,7 +265,7 @@ router.get(
  *                 balance: 4230.20
  *                 codCliente: 1
  *                 codCorretora: 2
-  *           401:
+ *           401:
  *             description: 'Token not Found'
  *             content:
  *               application/json:
@@ -332,7 +306,7 @@ router.post(
  *                 type: object
  *               example:
  *                 codCliente: 1
- *                 valor: 400.30
+ *                 Valor: 400.30
  *        responses:
  *           200:
  *             description: 'Retorna o saldo atualizado'
@@ -344,7 +318,7 @@ router.post(
  *                 codCliente: 1
  *                 codCorretora: 2
  *                 balance: 4230.20
-  *           401:
+ *           401:
  *             description: 'Token not Found'
  *             content:
  *               application/json:
@@ -352,6 +326,14 @@ router.post(
  *                   type: object
  *                 example:
  *                    {message: 'Token not Found'}
+  *           400:
+ *             description: 'Valor maior que possui'
+ *             content:
+ *               application/json:
+ *                 schema:
+ *                   type: object
+ *                 example:
+ *                    {message: 'Valor inválido'}
  *           404:
  *             description: 'Conta inválida'
  *             content:
@@ -396,7 +378,7 @@ router.post(
  *                 type: object
  *               example:
  *                 {message: 'Compra realizada com sucesso'}
-  *           401:
+ *           401:
  *             description: 'Token not Found'
  *             content:
  *               application/json:
