@@ -22,11 +22,11 @@ const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   const getAsset = await Asset.findOne({ attributes: ['id', 'quantity', 'value'], where: { id: codAtivo } });
   const getAcont = await UserAcont.findOne({ attributes: ['id', 'balance'], where: { id: codCliente } });
 
-  if (!getAsset) {
+  if (!getAsset || typeof codAtivo !== 'number') {
     const result = ({ status: 404, message: 'Ativo não encontrado' });
     return result;
   }
-  if (!getUser) {
+  if (!getUser || typeof codCliente !== 'number') {
     const result = ({ status: 404, message: 'Usuario não encontrado' });
     return result;
   }
@@ -34,11 +34,15 @@ const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
     const result = ({ status: 400, message: 'Quantidade insuficiente de ativos na corretora' });
     return result;
   }
+  if (typeof qtdeAtivo !== 'number') {
+    const result = ({ status: 400, message: 'Quantidade inválida' });
+    return result;
+  }
 
   const custoTotal = getAsset.dataValues.value * qtdeAtivo;
 
   if (getAcont.dataValues.balance < custoTotal) {
-    const result = ({ status: 400, message: 'Valor insuficiente para compra' });
+    const result = ({ status: 400, message: 'Saldo insuficiente para compra' });
     return result;
   }
 
@@ -57,20 +61,22 @@ const sellAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   const getAsset = await Asset.findOne({ attributes: ['id', 'quantity', 'value'], where: { id: codAtivo } });
   const getAcont = await UserAcont.findOne({ attributes: ['id', 'balance'], where: { id: codCliente } });
 
-  if (!getAsset) {
+  if (!getAsset || typeof codAtivo !== 'number') {
     const result = ({ status: 404, message: 'Ativo não encontrado' });
     return result;
   }
-  if (!getUser) {
+  if (!getUser || typeof codCliente !== 'number') {
     const result = ({ status: 404, message: 'Usuario não encontrado' });
     return result;
   }
-  if (qtdeAtivo > getUser.dataValues.qtdeAtivo || getUser.dataValues.qtdeAtivo === 0) {
-    const result = ({ status: 400, message: 'Quantidade insuficiente de ativos na carteira' });
+
+  if (qtdeAtivo <= 0 || typeof qtdeAtivo !== 'number') {
+    const result = ({ status: 400, message: 'Valor de venda inválido' });
     return result;
   }
-  if (qtdeAtivo <= 0) {
-    const result = ({ status: 400, message: 'Valor de venda inválido' });
+
+  if (qtdeAtivo > getUser.dataValues.qtdeAtivo || getUser.dataValues.qtdeAtivo === 0) {
+    const result = ({ status: 400, message: 'Quantidade insuficiente de ativos na carteira' });
     return result;
   }
 

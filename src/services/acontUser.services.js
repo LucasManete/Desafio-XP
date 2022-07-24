@@ -11,11 +11,11 @@ const getBalanceUser = async (id) => {
 
 const depositUser = async (codCliente, Valor) => {
   const byPk = await UserAcont.findByPk(codCliente);
-  if (!byPk) {
+  if (!byPk || typeof codCliente !== 'number') {
     const result = { status: 404, message: 'Conta inválida' };
     return result;
   }
-  if (Valor < 0 || Valor === 0) {
+  if (Valor <= 0 || typeof Valor !== 'number') {
     const result = { status: 400, message: 'Valor inválido' };
     return result;
   }
@@ -27,11 +27,11 @@ const depositUser = async (codCliente, Valor) => {
 
 const withdrawUser = async (codCliente, Valor) => {
   const byPk = await UserAcont.findByPk(codCliente);
-  if (!byPk) {
+  if (!byPk || typeof codCliente !== 'number') {
     const result = { status: 404, message: 'Conta inválida' };
     return result;
   }
-  if (Valor > byPk.dataValues.balance || Valor < 0 || Valor === 0) {
+  if (Valor > byPk.dataValues.balance || Valor <= 0 || typeof Valor !== 'number') {
     const result = { status: 400, message: 'Valor inválido' };
     return result;
   }

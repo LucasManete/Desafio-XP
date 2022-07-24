@@ -1,3 +1,4 @@
+require('express-async-errors');
 const express = require('express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
