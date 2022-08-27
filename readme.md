@@ -73,6 +73,12 @@ de negócio e a lógica necessária e devolver uma resposta ao controllers.
 
 exemplo: localhost:3000/docs
 
+
+
+## OBS: A primeira requisição deverá ser na rota /usuario, utilizem o exemplo que tem na documentação da rota para gerarem o token e conseguirem testar as outras rotas.
+
+
+
 ## Outros comandos
 
 Verifique o `package.json`, lá se encontram scripts para execução do projeto.

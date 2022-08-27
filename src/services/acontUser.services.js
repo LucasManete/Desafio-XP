@@ -21,7 +21,7 @@ const depositUser = async (codCliente, Valor) => {
   }
   const Saldo = +byPk.dataValues.balance + Valor;
   await UserAcont.update({ balance: Saldo }, { where: { codCliente } });
-  const newBalance = await UserAcont.findByPk(codCliente, { attributes: { exclude: 'id' } });
+  const newBalance = await UserAcont.findByPk(codCliente, { attributes: { exclude: 'id' }, raw: true });
   return newBalance;
 };
 

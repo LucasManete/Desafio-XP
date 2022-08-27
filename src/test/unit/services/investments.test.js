@@ -3,185 +3,98 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 
 const investmentsService = require('../../../services/investments.services');
-
-describe('(camada service) Testa o retorno da API para todas as ações', () => {
-  const bancoDados = [
-    {
-      codCliente: 2,
-      codAtivo: 1,
-      qtdeAtivo: 10,
-      value: '75.00',
-    },
-    {
-      codCliente: 2,
-      codAtivo: 2,
-      qtdeAtivo: 120,
-      value: '500.00',
-    },
-    {
-      codCliente: 2,
-      codAtivo: 3,
-      qtdeAtivo: 50,
-      value: '65.00',
-    },
-  ];
-
-  before(async () => {
-    sinon.stub(investmentsService, 'findUserByInvestment').resolves(bancoDados);
-  });
-
-  after(() => {
-    investmentsService.findUserByInvestment.restore();
-  });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.findUserByInvestment();
-    expect(response).to.be.an('array');
-  });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.findUserByInvestment();
-    expect(response[0]).to.have.property('codCliente');
-    expect(response[0]).to.have.property('codAtivo');
-    expect(response[0]).to.have.property('qtdeAtivo');
-    expect(response[0]).to.have.property('value');
-  });
-});
-
-describe('(camada service) Testa o retorno da API para conta de clientes que não existe', () => {
-  const bancoDados = { message: 'Usuario não encontrado' };
-
-  before(async () => {
-    sinon.stub(investmentsService, 'findUserByInvestment').resolves(bancoDados);
-  });
-
-  after(() => {
-    investmentsService.findUserByInvestment.restore();
-  });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.findUserByInvestment();
-    expect(response).to.have.property('message');
-  });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.findUserByInvestment();
-    expect(response).to.have.property('message').contain('Usuario não encontrado');
-  });
-});
+const Models = require('../../../database/models');
+const {
+  mockAsset, mockBalance, mockBalanceOK, mockQtdAsset, mockVenda,
+} = require('../mockTeste');
 
 describe('(camada service) Testa o retorno da API para compra de ativos', () => {
-  const bancoDados = { message: 'Compra realizada com sucesso!' };
-
-  before(async () => {
-    sinon.stub(investmentsService, 'buyAssets').resolves(bancoDados);
-  });
-
-  after(() => {
-    investmentsService.buyAssets.restore();
-  });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.buyAssets();
+  it('Se não encontrar usuario', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(null);
+    const response = await investmentsService.buyAssets(1, 1, 1);
     expect(response).to.have.property('message');
+    sinon.restore();
   });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.buyAssets();
-    expect(response).to.have.property('message').contain('Compra realizada com sucesso!');
+  it('Se não encontrar um ativo', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(null);
+    const response = await investmentsService.buyAssets(1, 1, 1);
+    expect(response.message).to.be.equal('Ativo não encontrado');
+    sinon.restore();
   });
-});
-
-describe('(camada service) Testa o retorno da API para erro na compra de ativo', () => {
-  const bancoDados = { message: 'Usuario não encontrado' };
-
-  before(async () => {
-    sinon.stub(investmentsService, 'buyAssets').resolves(bancoDados);
+  it('fail se tentar comprar mais ativos que tem na corretora', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(mockAsset);
+    const response = await investmentsService.buyAssets(1, 10000, 1);
+    expect(response.message).to.be.equal('Quantidade insuficiente de ativos na corretora');
+    sinon.restore();
   });
-
-  after(() => {
-    investmentsService.buyAssets.restore();
+  it('Saldo insuficiente', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.UserAcont, 'findOne').resolves(mockBalance);
+    const response = await investmentsService.buyAssets(1, 1, 1);
+    expect(response.message).to.be.equal('Saldo insuficiente para compra');
+    sinon.restore();
   });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.buyAssets();
-    expect(response).to.have.property('message');
-  });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.buyAssets();
-    expect(response).to.have.property('message').contain('Usuario não encontrado');
-  });
-});
-
-describe('(camada service) Testa o retorno da API para erro na compra de ativo', () => {
-  const bancoDados = { message: 'Quantidade insuficiente de ativos na corretora' };
-
-  before(async () => {
-    sinon.stub(investmentsService, 'buyAssets').resolves(bancoDados);
-  });
-
-  after(() => {
-    investmentsService.buyAssets.restore();
-  });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.buyAssets();
-    expect(response).to.have.property('message');
-  });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.buyAssets();
-    expect(response).to.have.property('message').contain('Quantidade insuficiente de ativos na corretora');
+  it('Compra efetuada', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.UserAcont, 'findOne').resolves(mockBalanceOK);
+    sinon.stub(Models.UserAcont, 'update').resolves(null);
+    sinon.stub(Models.Investment, 'update').resolves(null);
+    sinon.stub(Models.Asset, 'update').resolves(null);
+    const response = await investmentsService.buyAssets(1, 1, 1);
+    expect(response.message).to.be.equal('Compra realizada com sucesso!');
+    sinon.restore();
   });
 });
 
 describe('(camada service) Testa o retorno da API para venda de ativos', () => {
-  const bancoDados = { message: 'Venda realizada com sucesso!' };
-
-  before(async () => {
-    sinon.stub(investmentsService, 'sellAssets').resolves(bancoDados);
-  });
-
-  after(() => {
-    investmentsService.sellAssets.restore();
-  });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.sellAssets();
+  it('Se não encontrar usuario', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(null);
+    const response = await investmentsService.sellAssets(1, 1, 1);
     expect(response).to.have.property('message');
+    sinon.restore();
   });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.sellAssets();
-    expect(response).to.have.property('message').contain('Venda realizada com sucesso!');
+  it('Se não encontrar um ativo', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(null);
+    const response = await investmentsService.sellAssets(1, 1, 1);
+    expect(response.message).to.be.equal('Ativo não encontrado');
+    sinon.restore();
   });
-});
-
-describe('(camada service) Testa o retorno da API para erros na venda de ativos', () => {
-  const bancoDados = { message: 'Usuario não encontrado' };
-
-  before(async () => {
-    sinon.stub(investmentsService, 'sellAssets').resolves(bancoDados);
+  it('fail se tentar vender mais ativos que tem na carteira', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockQtdAsset);
+    const response = await investmentsService.sellAssets(1, 20, 1);
+    expect(response.message).to.be.equal('Quantidade insuficiente de ativos na carteira');
+    sinon.restore();
   });
-
-  after(() => {
-    investmentsService.sellAssets.restore();
+  it('Ativo não encontrado', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(null);
+    sinon.stub(Models.UserAcont, 'findOne').resolves(mockBalance);
+    const response = await investmentsService.sellAssets(1, 1, 1);
+    expect(response.message).to.be.equal('Ativo não encontrado');
+    sinon.restore();
   });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.sellAssets();
-    expect(response).to.have.property('message');
+  it('Valor menor que 0', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(mockVenda);
+    sinon.stub(Models.UserAcont, 'findOne').resolves(mockBalance);
+    const response = await investmentsService.sellAssets(1, 0, 1);
+    expect(response.message).to.be.equal('Valor de venda inválido');
+    sinon.restore();
   });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.sellAssets();
-    expect(response).to.have.property('message').contain('Usuario não encontrado');
-  });
-});
-
-describe('(camada service) Testa o retorno da API para erros na venda de ativos', () => {
-  const bancoDados = { message: 'Quantidade insuficiente de ativos na carteira' };
-
-  before(async () => {
-    sinon.stub(investmentsService, 'sellAssets').resolves(bancoDados);
-  });
-
-  after(() => {
-    investmentsService.sellAssets.restore();
-  });
-  it('Retorna um objeto message', async () => {
-    const response = await investmentsService.sellAssets();
-    expect(response).to.have.property('message');
-  });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await investmentsService.sellAssets();
-    expect(response).to.have.property('message').contain('Quantidade insuficiente de ativos na carteira');
+  it('Venda efetuada', async () => {
+    sinon.stub(Models.Investment, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.Asset, 'findOne').resolves(mockAsset);
+    sinon.stub(Models.UserAcont, 'findOne').resolves(mockBalanceOK);
+    sinon.stub(Models.UserAcont, 'update').resolves(null);
+    sinon.stub(Models.Investment, 'update').resolves(null);
+    sinon.stub(Models.Asset, 'update').resolves(null);
+    const response = await investmentsService.sellAssets(1, 1, 1);
+    expect(response.message).to.be.equal('Venda realizada com sucesso!');
+    sinon.restore();
   });
 });

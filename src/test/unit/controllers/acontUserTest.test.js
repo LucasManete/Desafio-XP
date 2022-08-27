@@ -1,4 +1,4 @@
-// /* eslint-disable no-undef */
+/* eslint-disable no-undef */
 // const sinon = require('sinon');
 // const { expect } = require('chai');
 
@@ -51,6 +51,32 @@
 
 //   it('Retorna o "status 404"', async () => {
 //     const teste = await acontController.getAcontUserController(request, response);
+//     expect(response.status.calledWith(404)).to.be.equal(true);
+//   });
+
+//   it('Retorna um objeto', async () => {
+//     await acontController.getAcontUserController(request, response);
+
+//     expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+//   });
+// });
+
+// describe('(camada controller) Verifica getBalanceUser', async () => {
+//   const response = { message: 'Conta inválida' };
+//   const request = { params: { id: 1 } };
+//   before(async () => {
+//     response.status = sinon.stub().returns(response);
+//     response.json = sinon.stub().returns();
+
+//     sinon.stub(acontServices, 'getBalanceUser').resolves(request);
+//   });
+
+//   after(() => {
+//     acontServices.getBalanceUser.restore();
+//   });
+
+//   it('Retorna o "status 404"', async () => {
+//     await acontController.getAcontUserController(request, response);
 //     expect(response.status.calledWith(404)).to.be.equal(true);
 //   });
 
