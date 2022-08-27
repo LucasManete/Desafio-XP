@@ -12,7 +12,7 @@ describe('(camada service) Testa o retorno da API para compra de ativos', () => 
   it('Se não encontrar usuario', async () => {
     sinon.stub(Models.Investment, 'findOne').resolves(null);
     const response = await investmentsService.buyAssets(1, 1, 1);
-    expect(response).to.have.property('message');
+    expect(response.message).to.be.equal('Usuario ou Ativo não encontrado');
     sinon.restore();
   });
   it('Se não encontrar um ativo', async () => {
@@ -54,7 +54,7 @@ describe('(camada service) Testa o retorno da API para venda de ativos', () => {
   it('Se não encontrar usuario', async () => {
     sinon.stub(Models.Investment, 'findOne').resolves(null);
     const response = await investmentsService.sellAssets(1, 1, 1);
-    expect(response).to.have.property('message');
+    expect(response.message).to.be.equal('Usuario ou Ativo não encontrado');
     sinon.restore();
   });
   it('Se não encontrar um ativo', async () => {

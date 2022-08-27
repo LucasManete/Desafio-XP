@@ -20,7 +20,7 @@ const findUserByInvestment = async (codCliente) => {
 const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   const getUser = await Investment.findOne({ attributes: ['id', 'qtdeAtivo'], where: { codCliente, codAtivo } });
   if (!getUser || typeof codCliente !== 'number') {
-    const result = ({ status: 404, message: 'Usuario não encontrado' });
+    const result = ({ status: 404, message: 'Usuario ou Ativo não encontrado' });
     return result;
   }
 
@@ -61,7 +61,7 @@ const buyAssets = async (codCliente, qtdeAtivo, codAtivo) => {
 const sellAssets = async (codCliente, qtdeAtivo, codAtivo) => {
   const getUser = await Investment.findOne({ attributes: ['id', 'qtdeAtivo'], where: { codCliente, codAtivo } });
   if (!getUser || typeof codCliente !== 'number') {
-    const result = ({ status: 404, message: 'Usuario não encontrado' });
+    const result = ({ status: 404, message: 'Usuario ou Ativo não encontrado' });
     return result;
   }
 
@@ -92,7 +92,7 @@ const sellAssets = async (codCliente, qtdeAtivo, codAtivo) => {
 
   await Investment.update({ qtdeAtivo: assets }, { where: { codCliente, codAtivo } });
   await UserAcont.update({ balance: valorAttDaConta }, { where: { codCliente } });
-  await Asset.update({ quantity: quantityAtt }, { where: { codAtivo } });
+  await Asset.update({ quantity: quantityAtt }, { where: { id: codAtivo } });
   return { status: 200, message: 'Venda realizada com sucesso!' };
 };
 
