@@ -3,186 +3,109 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 const UserServices = require('../../../services/acontUser.services');
+const { errorAcontMock, acontUserMock, newValue } = require('../mockTeste');
+const Models = require('../../../database/models');
 
 describe('(camada service) Testa o retorno do banco de dados para conta de clientes', () => {
-  const bancoDados = { codCliente: 2, Saldo: 5000 };
-
   before(async () => {
-    sinon.stub(UserServices, 'getBalanceUser').resolves(bancoDados);
+    sinon.stub(Models.UserAcont, 'findByPk').resolves(acontUserMock);
   });
 
   after(() => {
-    UserServices.getBalanceUser.restore();
+    Models.UserAcont.findByPk.restore();
   });
   it('Retorna um objeto', async () => {
-    const response = await UserServices.getBalanceUser();
-    expect(response).to.be.an('object');
+    const response = await UserServices.getBalanceUser(acontUserMock.codCliente);
+    expect(response).to.be.equal(acontUserMock);
   });
-  it('retorna um objeto que contem 2 keys', async () => {
-    const result = await UserServices.getBalanceUser();
-    expect(result).to.have.property('codCliente');
-    expect(result).to.have.property('Saldo');
+  it('retorna um objeto que contem 3 keys', async () => {
+    const result = await UserServices.getBalanceUser(acontUserMock.codCliente);
+    expect(result.dataValues).to.have.property('codCliente');
+    expect(result.dataValues).to.have.property('balance');
+    expect(result.dataValues).to.have.property('codCorretora');
   });
 });
 
 describe('(camada service) Testa o retorno da API para conta de clientes que não existe', () => {
-  const bancoDados = { message: 'Conta não econtrada' };
-
   before(async () => {
-    sinon.stub(UserServices, 'getBalanceUser').resolves(bancoDados);
+    sinon.stub(Models.UserAcont, 'findByPk').resolves(errorAcontMock);
   });
-
   after(() => {
-    UserServices.getBalanceUser.restore();
-  });
-  it('Retorna um objeto message', async () => {
-    const response = await UserServices.getBalanceUser(99);
-    expect(response).to.have.property('message');
+    Models.UserAcont.findByPk.restore();
   });
   it('Retorna um objeto message com conteúdo', async () => {
     const response = await UserServices.getBalanceUser(99);
-    expect(response).to.have.property('message').contain('Conta não econtrada');
+    expect(response.message).to.be.equal('Conta inválida');
+    expect(response.status).to.be.equal(404);
   });
 });
 
 describe('(camada service) Testa o retorno da API para o deposito da conta clientes', () => {
-  const bancoDados = { codCliente: 2, codCorretora: 2, balance: 5000 };
-
   before(async () => {
-    sinon.stub(UserServices, 'depositUser').resolves(bancoDados);
+    sinon.stub(Models.UserAcont, 'findByPk').resolves(acontUserMock.dataValues)
+      .onCall(0).resolves(acontUserMock)
+      .onCall(1)
+      .resolves(newValue);
+    sinon.stub(Models.UserAcont, 'update').resolves();
   });
 
   after(() => {
-    UserServices.depositUser.restore();
+    Models.UserAcont.findByPk.restore();
+    Models.UserAcont.update.restore();
   });
   it('Retorna um objeto com 3 propriedades', async () => {
-    const response = await UserServices.depositUser();
-    expect(response).to.have.property('balance');
-    expect(response).to.have.property('codCliente');
-    expect(response).to.have.property('codCorretora');
+    const response = await UserServices.depositUser(1, 10);
+    expect(response.codCliente).to.be.equal(1);
+    expect(response.codCorretora).to.be.equal(2);
+    expect(response.balance).to.be.equal(4230);
   });
 });
 
 describe('(camada service) Testa o retorno da API para o deposito invalido da conta clientes', () => {
-  const bancoDados = { message: 'Valor inválido' };
-
   before(async () => {
-    sinon.stub(UserServices, 'depositUser').resolves(bancoDados);
+    sinon.stub(Models.UserAcont, 'findByPk').resolves(acontUserMock);
+    sinon.stub(Models.UserAcont, 'update').resolves();
   });
 
   after(() => {
-    UserServices.depositUser.restore();
+    Models.UserAcont.findByPk.restore();
+    Models.UserAcont.update.restore();
   });
   it('Retorna um objeto message', async () => {
-    const response = await UserServices.depositUser();
-    expect(response).to.have.property('message');
-  });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await UserServices.depositUser();
-    expect(response).to.have.property('message').contain('Valor inválido');
+    const response = await UserServices.depositUser(1, -1);
+    expect(response.message).to.be.equal('Valor inválido');
   });
 });
 
-describe('(camada service) Testa o retorno da API para o deposito em uma conta invalida', () => {
-  const bancoDados = { message: 'Conta inválida' };
-
+describe('(camada service) Testa o retorno da API para o saque de um valor invalido', () => {
   before(async () => {
-    sinon.stub(UserServices, 'depositUser').resolves(bancoDados);
+    sinon.stub(Models.UserAcont, 'findByPk').resolves(acontUserMock);
+    sinon.stub(Models.UserAcont, 'update').resolves();
   });
 
   after(() => {
-    UserServices.depositUser.restore();
+    Models.UserAcont.findByPk.restore();
+    Models.UserAcont.update.restore();
   });
-  it('Retorna um objeto message', async () => {
-    const response = await UserServices.depositUser();
-    expect(response).to.have.property('message');
-  });
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await UserServices.depositUser();
-    expect(response).to.have.property('message').contain('Conta inválida');
-  });
-});
-
-describe('(camada service) Testa o retorno da API para o deposito em uma conta invalida', () => {
-  const bancoDados = { balance: 3000, codCliente: 2, codCorretora: 2 };
-
-  before(async () => {
-    sinon.stub(UserServices, 'withdrawUser').resolves(bancoDados);
-  });
-
-  after(() => {
-    UserServices.withdrawUser.restore();
-  });
-  it('Retorna um objeto com 3 chaves', async () => {
-    const response = await UserServices.withdrawUser();
-    expect(response).to.have.property('balance');
-    expect(response).to.have.property('codCliente');
-    expect(response).to.have.property('codCorretora');
+  it('Retorna uma mensagem de erro', async () => {
+    const response = await UserServices.withdrawUser(1, -1);
+    expect(response.message).to.be.equal('Valor inválido');
   });
 });
 
 describe('(camada service) Testa o retorno da API para o saque em uma conta invalida', () => {
-  const bancoDados = { message: 'Conta inválida' };
-
   before(async () => {
-    sinon.stub(UserServices, 'withdrawUser').resolves(bancoDados);
+    sinon.stub(Models.UserAcont, 'findByPk').resolves(acontUserMock);
+    sinon.stub(Models.UserAcont, 'update').resolves();
   });
 
   after(() => {
-    UserServices.withdrawUser.restore();
+    Models.UserAcont.findByPk.restore();
+    Models.UserAcont.update.restore();
   });
 
   it('Retorna um objeto message', async () => {
-    const response = await UserServices.withdrawUser();
+    const response = await UserServices.withdrawUser('1', 1);
     expect(response).to.have.property('message');
-  });
-
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await UserServices.withdrawUser();
-    expect(response).to.have.property('message').contain('Conta inválida');
-  });
-});
-
-describe('(camada service) Testa o retorno da API para o saque com valor invalido', () => {
-  const bancoDados = { message: 'Valor inválido' };
-
-  before(async () => {
-    sinon.stub(UserServices, 'withdrawUser').resolves(bancoDados);
-  });
-
-  after(() => {
-    UserServices.withdrawUser.restore();
-  });
-
-  it('Retorna um objeto message', async () => {
-    const response = await UserServices.withdrawUser();
-    expect(response).to.have.property('message');
-  });
-
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await UserServices.withdrawUser();
-    expect(response).to.have.property('message').contain('Valor inválido');
-  });
-});
-
-describe('(camada service) Testa o retorno da API para o saque com valor menor ou igual a 0', () => {
-  const bancoDados = { message: 'Valor inválido' };
-
-  before(async () => {
-    sinon.stub(UserServices, 'withdrawUser').resolves(bancoDados);
-  });
-
-  after(() => {
-    UserServices.withdrawUser.restore();
-  });
-
-  it('Retorna um objeto message', async () => {
-    const response = await UserServices.withdrawUser();
-    expect(response).to.have.property('message');
-  });
-
-  it('Retorna um objeto message com conteúdo', async () => {
-    const response = await UserServices.withdrawUser();
-    expect(response).to.have.property('message').contain('Valor inválido');
   });
 });

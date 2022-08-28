@@ -22,8 +22,6 @@ const validateToken = require('../middlewares/validadeJWT');
  *    post:
  *        tags: [DesafioXP]
  *        description: Retorna o token para navegação em outras rotas
- *        security:
- *          - bearerAuth: []
  *        requestBody:
  *            required: true
  *            content:

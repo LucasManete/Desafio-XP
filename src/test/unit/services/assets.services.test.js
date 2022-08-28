@@ -3,35 +3,16 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 
 const assetsService = require('../../../services/assets.services');
+const Models = require('../../../database/models');
+const { assetsMock } = require('../mockTeste');
 
 describe('(camada service) Testa o retorno da API para todas as ações', () => {
-  const bancoDados = [
-    {
-      id: 1,
-      name: 'Azul',
-      quantity: 497,
-      value: '75.00',
-    },
-    {
-      id: 2,
-      name: 'XP',
-      quantity: 580,
-      value: '500.00',
-    },
-    {
-      id: 3,
-      name: 'Petrobras',
-      quantity: 290,
-      value: '65.00',
-    },
-  ];
-
   before(async () => {
-    sinon.stub(assetsService, 'getAllAssets').resolves(bancoDados);
+    sinon.stub(Models.Asset, 'findAll').resolves(assetsMock);
   });
 
   after(() => {
-    assetsService.getAllAssets.restore();
+    Models.Asset.findAll.restore();
   });
   it('Retorna um objeto', async () => {
     const response = await assetsService.getAllAssets();
@@ -46,18 +27,18 @@ describe('(camada service) Testa o retorno da API para todas as ações', () => 
   });
 });
 
-describe('(camada service) Testa o retorno da API para todas as ações', () => {
+describe('(camada service) Testa o retorno da API para uma ação', () => {
   const bancoDados = { message: 'Ação não encontrada' };
 
   before(async () => {
-    sinon.stub(assetsService, 'findOneAsset').resolves(bancoDados);
+    sinon.stub(Models.Asset, 'findByPk').resolves(bancoDados);
   });
 
   after(() => {
-    assetsService.findOneAsset.restore();
+    Models.Asset.findByPk.restore();
   });
   it('Retorna um objeto message', async () => {
-    const response = await assetsService.findOneAsset();
+    const response = await assetsService.findOneAsset(99);
     expect(response).to.have.property('message');
   });
   it('Retorna um objeto message com conteúdo', async () => {
